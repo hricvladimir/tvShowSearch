@@ -1,6 +1,7 @@
 const search = document.querySelector('input')
 const form = document.querySelector('form')
 const submitBtn = document.querySelector('#submit-btn')
+const main = document.querySelector('main')
 let latestAdded
 
 submitBtn.addEventListener('click', function (e) {
@@ -8,13 +9,13 @@ submitBtn.addEventListener('click', function (e) {
   const searchValue = search.value
   search.value = ''
   if (latestAdded) {
-    document.body.removeChild(latestAdded)
+    main.removeChild(latestAdded)
   }
   fetchMoveis(searchValue).then(async function (val) {
     console.log(val)
     const moviesContainer = document.createElement('div')
     moviesContainer.classList.add('movies-container')
-    document.body.appendChild(moviesContainer)
+    main.appendChild(moviesContainer)
     latestAdded = moviesContainer
 
     for (movie of val.data) {
@@ -43,11 +44,13 @@ async function delayedMovieAppend(movie, container, delay) {
       const movieImg = document.createElement('img')
       const movieTitle = document.createElement('h3')
       const movieRating = document.createElement('p')
+      const movieInfo = document.createElement('div')
 
-      movieElement.classList.add('movie')
+      movieElement.classList.add('movie', 'new-movie')
       movieImg.classList.add('movie-img')
       movieTitle.classList.add('movie-title')
       movieRating.classList.add('movie-rating')
+      movieInfo.classList.add('movie-info')
 
       movieImg.alt = 'movie-img'
       movieImg.src = movie.show.image
@@ -59,8 +62,9 @@ async function delayedMovieAppend(movie, container, delay) {
         : 'No Rating Yet'
 
       movieElement.appendChild(movieImg)
-      movieElement.appendChild(movieTitle)
-      movieElement.appendChild(movieRating)
+      movieInfo.appendChild(movieTitle)
+      movieInfo.appendChild(movieRating)
+      movieElement.appendChild(movieInfo)
       container.appendChild(movieElement)
       resolve()
     }, delay)
